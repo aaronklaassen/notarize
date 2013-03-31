@@ -14,7 +14,6 @@ module Notarize
     end
 
     def generate_signature(params, salt)
-      puts sorted_query_string(params) + salt
       Digest::SHA256.hexdigest(sorted_query_string(params) + salt)
     end
   end
