@@ -6,3 +6,8 @@
 
 .DS_Store
 .rvmrc
+*.gem
+*.sqlite3
+coverage
+rdoc
+pkg

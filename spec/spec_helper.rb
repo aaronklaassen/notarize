@@ -1,0 +1,2 @@
+require 'notarize'
+require 'digest'
