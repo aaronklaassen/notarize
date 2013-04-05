@@ -28,7 +28,9 @@ module Notarize
     end
 
     def send_request(path, params = nil)
-      # TODO: the future may require non-GET requests
+      # TODO: if params doesn't include the public key, add it.
+      # TODO: method parameter. i.e. handle non-GET.
+
       response = HTTParty.get(signed_url(path, params))
       { body: JSON.parse(response.body), code: response.code }
     end
