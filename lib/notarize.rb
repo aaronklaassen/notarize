@@ -34,7 +34,7 @@ module Notarize
     end
 
     def config
-      raise NotImplementedError.new "Notarize config not implemented."
+      raise NotImplementedError.new "Notarize#config not implemented."
       # {
       #   host:        "example.com"
       #   public_key:  "username"
@@ -42,21 +42,4 @@ module Notarize
       # }
     end
   end
-
-  module Server
-    include Notarize::Helper
-
-    protected
-
-    def request_signature(request)
-      params = request.get? ? request.env["rack.request.query_hash"] : request.env["rack.request.form_hash"]
-
-      # TODO: config won't work here because it's got to be the private key of the client, not the server.
-      generate_signature(params, config[:private_key])
-    end
-
-    # TODO: sig checking
-    # find_api_user(username)
-  end
-
 end

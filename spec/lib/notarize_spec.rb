@@ -7,10 +7,6 @@ describe Notarize do
     include Notarize::Client
   end
 
-  class ApiServer
-    include Notarize::Server
-  end
-
   # sha256 of sorted query string + private key, i.e. "first=james&last=kirk&second=tiberiussecret"
   let(:correct_sig) { "359b09130269290d17ed2606a5e8c6f53517054b03a1955d7028197a6f7f65f2" }
   let(:params) { { first: "james", second: "tiberius", last: "kirk", signature: "blahblahblah" } }
@@ -18,7 +14,6 @@ describe Notarize do
   let(:private_key) { "secret" }
 
   let(:client) { ApiClient.new } 
-  let(:server) { ApiServer.new }
 
   describe Notarize::Helper do
 
