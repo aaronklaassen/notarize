@@ -27,11 +27,13 @@ module Notarize
       "#{config[:host]}#{path}?#{sorted_query_string(params)}&signature=#{generate_signature(params, config[:private_key])}"
     end
 
-    def send_request(path, params = nil)
-      # TODO: if params doesn't include the public key, add it.
-      # TODO: method parameter. i.e. handle non-GET.
+    def send_request(path, params = {}, method = :get)
+      raise ArgumentError.new("Invalid HTTP verb #{method}") if ![:get, :post, :put, :delete].include?(method)
 
-      response = HTTParty.get(signed_url(path, params))
+      params ||= {}
+      params.merge!({ public_key: config[:public_key] })
+      response = HTTParty.send(method, signed_url(path, params))
+
       { body: JSON.parse(response.body), code: response.code }
     end
 

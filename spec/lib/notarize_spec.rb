@@ -58,5 +58,9 @@ describe Notarize do
       client.signed_url("/path/to/api/", params).should == correct_url
     end
 
+    it "should refuse invalid HTTP verbs" do
+      expect { client.send_request('/path/', {}, :garbage) }.to raise_error(ArgumentError)
+    end
+
   end
 end

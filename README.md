@@ -31,7 +31,11 @@ Implement a #config method that returns a hash with :host, :public_key, and :pri
 
     ...
 
-    send_request("/example/path/42/", { foo: "Foo", bar: "Bar" }, :get)
+    send_request("/example/path/42/", { foo: "Foo", bar: "Bar" })
+
+Optionally you can also pass in an alternate HTTP verb for non-GET requests. Accepted values are :get (the default), :post, :put, and :delete.
+
+    send_request("/example/path/42/", { foo: "Foo", bar: "Bar" }, :post)
 
 send_request returns a hash with two values. :body with the parsed json response, and :code with the HTTP status code.
 
@@ -45,12 +49,12 @@ Notarize provides a generate_signature helper method that takes a hash of the in
     ...
 
     def authenticate_request!
-      client = ApiClient.where(public_key: params[:public_key])
+      client = ApiClient.where(public_key: params[:public_key]).first # Or however your app works.
 
       if generate_signature(params, client.private_key) == params[:signature]
         # It's ok!
       else
-        # Refuse!
+        # Get outta town!
       end
     end
 
