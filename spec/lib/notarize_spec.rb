@@ -47,4 +47,8 @@ describe Notarize::Notary do
     Notarize::Notary.matching_signature?(params.merge(signature: correct_sig), private_key)
   end
 
+  it "should not validate an incorrect signature" do
+    Notarize::Notary.matching_signature?(params, private_key)
+  end
+
 end
