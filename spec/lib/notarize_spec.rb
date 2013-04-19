@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe Notarize::Notary do
 
   # sha256 of sorted query string + private key, i.e. "first=james&last=kirk&second=tiberiussecret"
@@ -13,26 +12,26 @@ describe Notarize::Notary do
 
   context "excluding the signature" do
     it "should sort the params by key" do
-      client.sorted_query_string(params).should == correct_sorted_params
+      Notarize::Notary.sorted_query_string(params).should == correct_sorted_params
     end
   end
 
   context "including the signature" do
     it "should sort the params by key" do
-      client.sorted_query_string(params, false).should == "#{correct_sorted_params}&signature=#{params[:signature]}"
+       Notarize::Notary.sorted_query_string(params, false).should == "#{correct_sorted_params}&signature=#{params[:signature]}"
     end
   end
 
   it "should generate the correct signature" do
-    client.generate_signature(params, private_key).should == correct_sig
+     Notarize::Notary.generate_signature(params, private_key).should == correct_sig
   end
 
   it "should generate the wrong signature with wrong params" do
-    client.generate_signature({ foo: "foo", bar: "bar" }, private_key).should_not == correct_sig
+     Notarize::Notary.generate_signature({ foo: "foo", bar: "bar" }, private_key).should_not == correct_sig
   end
 
   it "should generate the wrong signature with wrong private key" do
-    client.generate_signature(params, "guesswork").should_not == correct_sig
+     Notarize::Notary.generate_signature(params, "guesswork").should_not == correct_sig
   end
 
   it "should generate a complete signed URL" do
@@ -44,5 +43,8 @@ describe Notarize::Notary do
     expect { client.send_request('/path/', {}, :garbage) }.to raise_error(ArgumentError)
   end
 
-  
+  it "should validate a correct signature" do
+    Notarize::Notary.matching_signature?(params.merge(signature: correct_sig), private_key)
+  end
+
 end
