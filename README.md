@@ -21,45 +21,38 @@ Or install it with:
 
 ## As the client
 
-    include Notarize::Client
+Just instantiate a Notary object with your service config and call #send_request with the path and a parameter list.
 
-Implement a #config method that returns a hash with :host, :public_key, and :private_key values for the service you're using. Then just call #send_request with the path and a parameter list.
-
-    def config
-      { host: "http://www.example-service.com/", public_key: "yourname", private_key: "secret" }
-    end
-
-    ...
-
-    send_request("/example/path/42/", { foo: "Foo", bar: "Bar" })
+    notary = Notarize::Notary.new("http://www.example.com", "public_key", "private_key")    
+    notary.send_request("/example/path/42/", { foo: "Foo", bar: "Bar" })
 
 Optionally you can also pass in an alternate HTTP verb for non-GET requests. Accepted values are :get (the default), :post, :put, and :delete.
 
-    send_request("/example/path/42/", { foo: "Foo", bar: "Bar" }, :post)
+    response = notary.send_request("/example/path/42/", { foo: "Foo", bar: "Bar" }, :post)
 
 send_request returns a hash with two values. :body with the parsed json response, and :code with the HTTP status code.
 
 ## As the server
 
-Notarize provides a generate_signature helper method that takes a hash of the incoming params, and the private key of the client making the request. Result should match the value in the incoming 'signature' parameter. For example, in a before_filter:
+Notarize provides a matching_signature? class method that takes a hash of the incoming params, and the private key of the client making the request. The result is checked against params[:signature].
 
-    include Notarize::Helper
-    
     before_filter :authenticate_request!
     ...
 
     def authenticate_request!
       client = ApiClient.where(public_key: params[:public_key]).first # Or however your app works.
 
-      if generate_signature(params, client.private_key) == params[:signature]
+      if Notarize::Notary.matching_signature?(params, client.private_key)
         # It's ok!
       else
         # Get outta town!
       end
     end
 
-Notarize doesn't manage your list of authorized clients for you.
+This ApiClient object is just an example; Notarize doesn't manage your list of authorized clients for you.
 
 ## Parties Responsible
 
-Author: Aaron Klaassen (aaron@outerspacehero.com)
+Aaron Klaassen
+aaron@outerspacehero.com
+http://www.outerspacehero.com/
