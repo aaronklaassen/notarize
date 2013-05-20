@@ -41,7 +41,7 @@ module Notarize
 
       # For the service-side
       def matching_signature?(params, private_key)
-        generate_signature(params, private_key) == params[:signature]
+        generate_signature(params, private_key) == (params[:signature] || params['signature'])
       end
 
     end
