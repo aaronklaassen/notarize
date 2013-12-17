@@ -53,6 +53,7 @@ This ApiClient object is just an example; Notarize doesn't manage your list of a
 
 ## Parties Responsible
 
-Aaron Klaassen
-aaron@outerspacehero.com
-http://www.outerspacehero.com/
+Aaron Klaassen    
+aaron@outerspacehero.com    
+http://www.outerspacehero.com/    
+[@aaronklaassen](https://www.twitter.com/aaronklaassen/)
